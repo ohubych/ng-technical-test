@@ -3,6 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { State } from '@app/reducers';
 import { Currency } from '@app/modules/currencies-list/store/currency.model';
 import { selectAllCurrency } from '@app/modules/currencies-list/store/currency.reducer';
+import { addCurrency, deleteCurrency } from "@app/modules/currencies-list/store/currency.actions";
 
 @Component({
     selector: 'app-currencies-table',
@@ -53,5 +54,9 @@ export class CurrenciesTableComponent implements OnInit {
         //     .filter(({ disabled }) => !disabled)
         //     .forEach(({ id }) => this.updateCheckedSet(id, checked));
         this.refreshCheckedStatus();
+    }
+
+    public deleteTransaction(id: string): void {
+        this.store.dispatch(deleteCurrency({ id }));
     }
 }

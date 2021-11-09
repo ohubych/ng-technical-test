@@ -53,6 +53,7 @@
         "memoizee": "^0.4.15",
         "moment": "^2.29.1",
         "ng-zorro-antd": "^11.4.2",
+        "ngrx-store-localstorage": "^12.0.1",
         "ngx-webstorage": "^8.0.0",
         "rxjs": "^6.6.7",
         "short-uuid": "^4.2.0",
