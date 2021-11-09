@@ -1,0 +1,77 @@
+<h3>Transaction Information</h3>
+<form nz-form [formGroup]="form" class="add-form">
+    <!-- Internal Account To Debit Select -->
+    <nz-form-item>
+        <nz-form-label [nzSm]="12" [nzXs]="24" nzRequired nzFor="account" [nzRequired]="false">Internal Account To Debit</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24">
+            <nz-select id="account" formControlName="account">
+                <nz-option *ngFor="let item of accountOptions" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <!-- Amount Select -->
+    <nz-form-item>
+        <nz-form-label [nzSm]="12" [nzXs]="24" nzFor="amount" nzRequired [nzRequired]="false">Amount</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" formGroupName="amount">
+            <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+                <ng-template #addOnAfterTemplate>
+                    <nz-select formControlName="currency" class="currency-select">
+                        <nz-option *ngFor="let item of currencyOptions" [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
+                    </nz-select>
+                </ng-template>
+                <input type="number" formControlName="value" id="'amount'" nz-input />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <!-- Free paid by receiver switch -->
+    <nz-form-item>
+        <nz-form-label [nzSm]="12" [nzXs]="24" nzRequired [nzRequired]="false">Free paid by receiver</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24">
+            <nz-switch formControlName="freePay"></nz-switch>
+        </nz-form-control>
+    </nz-form-item>
+    <!-- Destination Select -->
+    <nz-form-item>
+        <nz-form-label [nzSm]="12" [nzXs]="24" nzRequired nzFor="destination" [nzRequired]="false">Destination</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24">
+            <nz-select formControlName="destination" id="destination">
+                <nz-option *ngFor="let item of destinationOptions" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <!-- Metadata Form -->
+    <app-meta-data-form (add)="addMetaGroup($event)"></app-meta-data-form>
+    <!-- Metadata Form Array -->
+    <nz-form-item *ngFor="let metaData of metaDataArray.controls; let i = index">
+        <nz-form-label [nzSm]="12" [nzXs]="24" nzRequired [nzRequired]="false" [nzNoColon]="true"></nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" formArrayName="metaData">
+            <nz-input-group [nzSize]="'large'" [formGroupName]="i">
+                <div nz-row nzJustify="space-between" [nzGutter]="8" >
+                    <div nz-col nzSpan="8" >
+                        <input type="text" nz-input formControlName="key"/>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <input type="text" nz-input formControlName="value"/>
+                    </div>
+                    <div nz-col nzSpan="4">
+                        <button nz-button nzType="default" (click)="deleteMetaGroup(i)"><i nz-icon nzType="delete"></i></button>
+                    </div>
+                </div>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <!-- Form Buttons -->
+    <div nz-row nzJustify="end" [nzGutter]="5" class="add-form-margin">
+        <div nz-col>
+            <button nz-button nzType="default" (click)="resetForm()">Cancel</button>
+        </div>
+        <div nz-col>
+            <button
+                nz-button
+                nzType="primary"
+                [disabled]="!isValid"
+                (click)="create()"
+            >Create Transaction</button>
+        </div>
+    </div>
+</form>

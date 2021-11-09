@@ -1,0 +1,27 @@
+nz-header {
+    position: fixed;
+    width: 100%;
+
+    .logo {
+        width: 141px;
+    }
+
+    [nz-menu] {
+        line-height: 64px;
+    }
+}
+
+nz-content {
+    padding: 0 50px;
+    margin-top: 64px;
+
+    .inner-content {
+        background: #2d2832;
+        padding: 24px;
+        min-height: 380px;
+    }
+}
+
+nz-footer {
+    text-align: center;
+}

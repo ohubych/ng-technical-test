@@ -1,0 +1,20 @@
+<form nz-form class="add-form" [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label [nzSm]="12" [nzXs]="24" nzRequired [nzRequired]="false">Metadata</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="The input is not valid!">
+            <nz-input-group [nzSize]="'large'">
+                <div nz-row nzJustify="space-between" [nzGutter]="8">
+                    <div nz-col nzSpan="8">
+                        <input type="text" nz-input formControlName="key" />
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <input type="text" nz-input formControlName="value" />
+                    </div>
+                    <div nz-col nzSpan="4">
+                        <button nz-button disabled nzType="default"><i nz-icon nzType="delete"></i></button>
+                    </div>
+                </div>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+</form>
