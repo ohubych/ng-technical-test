@@ -1,9 +1,9 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { Action, createFeatureSelector, createReducer, on } from "@ngrx/store";
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Currency } from './currency.model';
 import * as CurrencyActions from './currency.actions';
 
-export const currenciesFeatureKey = 'currencies';
+export const currenciesFeatureKey = 'currency';
 
 export interface State extends EntityState<Currency> {
   // additional entities state properties
@@ -50,10 +50,15 @@ export const reducer = createReducer(
   ),
 );
 
+const feature = createFeatureSelector<State>(currenciesFeatureKey);
 
-export const {
+const {
   selectIds,
   selectEntities,
   selectAll,
   selectTotal,
-} = adapter.getSelectors();
+} = adapter.getSelectors(feature);
+
+export const selectCurrencyEntities = selectEntities;
+export const selectAllCurrency = selectAll;
+export const selectTotalCurrency = selectTotal;

@@ -1,4 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { State } from '@app/reducers';
+import { Currency } from '@app/modules/currencies-list/store/currency.model';
+import { selectAllCurrency } from '@app/modules/currencies-list/store/currency.reducer';
 
 @Component({
     selector: 'app-currencies-table',
@@ -7,9 +11,47 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrenciesTableComponent implements OnInit {
-    constructor() {
+    checked = false;
+    loading = false;
+    indeterminate = false;
+    listOfData: readonly Currency[] = [];
+    listOfCurrentPageData: readonly Currency[] = [];
+    setOfCheckedId = new Set<number>();
+
+    readonly currencies$ = this.store.pipe(
+        select(selectAllCurrency)
+    );
+
+    constructor(readonly store: Store<State>) {
     }
 
     ngOnInit(): void {
+        this.listOfData = [];
+
+        this.currencies$
+            .subscribe(list => console.log(list));
+    }
+
+    onCurrentPageDataChange(listOfCurrentPageData: readonly Currency[]): void {
+        this.listOfCurrentPageData = listOfCurrentPageData;
+        this.refreshCheckedStatus();
+    }
+
+    refreshCheckedStatus(): void {
+        // const listOfEnabledData = this.listOfCurrentPageData.filter(({ disabled }) => !disabled);
+        // this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
+        // this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
+    }
+
+    onItemChecked(id: number, checked: boolean): void {
+        // this.updateCheckedSet(id, checked);
+        this.refreshCheckedStatus();
+    }
+
+    onAllChecked(checked: boolean): void {
+        // this.listOfCurrentPageData
+        //     .filter(({ disabled }) => !disabled)
+        //     .forEach(({ id }) => this.updateCheckedSet(id, checked));
+        this.refreshCheckedStatus();
     }
 }

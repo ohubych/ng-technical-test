@@ -10,7 +10,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { NzIconModule } from "ng-zorro-antd/icon";
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 const modules = [
     NzButtonModule,

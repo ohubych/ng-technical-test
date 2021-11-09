@@ -65,10 +65,7 @@ export class AddCurrencyComponent {
     public create(): void {
         const id = shortId.generate();
         const date = new Date();
-        console.log(this.form.value);
-
         this.store.dispatch(addCurrency({ currency: { id, date, ...this.form.value } }));
-
         this.showMessage('success');
         this.resetForm();
     }

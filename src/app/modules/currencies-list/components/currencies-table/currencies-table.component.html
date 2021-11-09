@@ -1,1 +1,35 @@
-<p>currencies-table works!</p>
+<h1>Currencies</h1>
+<nz-table
+    #rowSelectionTable
+    nzShowPagination
+    nzShowSizeChanger
+    [nzData]="currencies$ | async"
+    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+>
+    <thead>
+    <tr>
+        <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+        <th>Id</th>
+        <th>Date</th>
+        <th>Currency</th>
+        <th>Amount</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of rowSelectionTable.data">
+        <td
+            [nzChecked]="setOfCheckedId.has(data.id)"
+            [nzDisabled]="data.disabled"
+            (nzCheckedChange)="onItemChecked(data.id, $event)"
+        ></td>
+        <td>{{ data.id }}</td>
+        <td>{{ data.date | date:'short' }}</td>
+        <td>{{ data.amount.currency }}</td>
+        <td>{{ data.amount.value }} {{ data.amount.currency }}</td>
+        <td>
+            <button nz-button nzType="default"><i nz-icon nzType="delete"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</nz-table>
