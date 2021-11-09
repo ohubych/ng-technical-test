@@ -13,6 +13,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import { reducers, metaReducers } from './reducers';
 
 const antDesignIcons = AllIcons as {
     [key: string]: IconDefinition;
@@ -31,6 +32,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
         StoreRouterConnectingModule.forRoot(),
         StoreModule.forRoot({}),
         NzLayoutModule,
+        StoreModule.forRoot(reducers, { metaReducers }),
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
     ],
     providers: [{ provide: NZ_ICONS, useValue: icons }],
     bootstrap: [AppComponent],

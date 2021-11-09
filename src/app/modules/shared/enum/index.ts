@@ -1,3 +1,3 @@
-export * from './account';
-export * from './currency';
-export * from './destination';
+export * from './accountEnum';
+export * from './currencyEnum';
+export * from './destinationEnum';

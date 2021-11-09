@@ -1,0 +1,11 @@
+ng g @ngrx/schematics:store State --root --module app.module.ts
+
+yarn add @ngrx/schematics --dev
+
+Update angular.json > cli > defaultCollection with @ngrx/schematics.
+
+
+ng generate module admin --flat false
+ng generate store admin/Admin -m admin.module.ts
+
+ng g en store/widget

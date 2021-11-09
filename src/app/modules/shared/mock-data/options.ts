@@ -1,39 +1,39 @@
 import { SelectOption } from '@app-shared/models';
-import { Account, Destination, Currency } from '@app-shared/enum';
+import { AccountEnum, DestinationEnum, CurrencyEnum } from '@app-shared/enum';
 
 export const accountOptions: SelectOption[] = [
     {
-        value: Account.UBSGroup,
+        value: AccountEnum.UBSGroup,
         label: 'UBS Group AG',
     },
     {
-        value: Account.CreditSuisseGroup,
+        value: AccountEnum.CreditSuisseGroup,
         label: 'Credit Suisse Group AG',
     },
 ];
 
 export const currencyOptions: SelectOption[] = [
     {
-        value: Currency.BTC,
-        label: Currency.BTC,
+        value: CurrencyEnum.BTC,
+        label: CurrencyEnum.BTC,
     },
     {
-        value: Currency.XTZ,
-        label: Currency.XTZ,
+        value: CurrencyEnum.XTZ,
+        label: CurrencyEnum.XTZ,
     },
     {
-        value: Currency.ETH,
-        label: Currency.ETH,
+        value: CurrencyEnum.ETH,
+        label: CurrencyEnum.ETH,
     },
 ];
 
 export const destinationOptions: SelectOption[] = [
     {
-        value: Destination.CH,
+        value: DestinationEnum.CH,
         label: 'Switzerland',
     },
     {
-        value: Destination.UA,
+        value: DestinationEnum.UA,
         label: 'Ukraine',
     },
 ];
