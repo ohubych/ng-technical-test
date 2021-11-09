@@ -4,6 +4,7 @@ import { SelectOption } from '@app-shared/models';
 import { accountOptions, currencyOptions, destinationOptions } from '@app/modules/shared/mock-data/options';
 import { Account, Currency, Destination } from '@app-shared/enum';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import * as shortId from 'short-uuid';
 
 @Component({
     selector: 'app-add-currency',
@@ -59,6 +60,10 @@ export class AddCurrencyComponent {
 
     public create(): void {
         console.log(this.form.value);
+        const id = shortId.generate();
+        console.log(id);
+        const date = new Date();
+        console.log(date);
         this.showMessage('success');
         this.resetForm();
     }
