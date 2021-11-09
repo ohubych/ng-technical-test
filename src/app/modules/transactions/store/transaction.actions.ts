@@ -51,3 +51,8 @@ export const deleteTransactions = createAction(
 export const clearTransactions = createAction(
   '[Transaction/API] Clear Transactions'
 );
+
+export const searchTransactionsById = createAction(
+    '[Transaction/API] Search Transactions by id',
+    props<{ search: string }>()
+);

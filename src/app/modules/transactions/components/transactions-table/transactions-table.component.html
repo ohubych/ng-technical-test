@@ -3,13 +3,14 @@
     #rowSelectionTable
     nzShowPagination
     nzShowSizeChanger
-    [nzData]="transactions$ | async"
-    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
->
+    [nzData]="transactions$ | async">
     <thead>
     <tr>
-        <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
-        <th>Id</th>
+        <th nzCustomFilter>Id
+            <nz-filter-trigger [(nzVisible)]="visible" [nzDropdownMenu]="menu">
+                <i nz-icon nzType="search"></i>
+            </nz-filter-trigger>
+        </th>
         <th>Date</th>
         <th>Currency</th>
         <th>Amount</th>
@@ -18,11 +19,6 @@
     </thead>
     <tbody>
     <tr *ngFor="let data of rowSelectionTable.data">
-        <td
-            [nzChecked]="setOfCheckedId.has(data.id)"
-            [nzDisabled]="data.disabled"
-            (nzCheckedChange)="onItemChecked(data.id, $event)"
-        ></td>
         <td>{{ data.id }}</td>
         <td>{{ data.date | date:'short' }}</td>
         <td>{{ data.amount.currency }}</td>
@@ -33,3 +29,10 @@
     </tr>
     </tbody>
 </nz-table>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+        <div class="search-box">
+            <input [formControl]="searchIdCtrl" type="text" nz-input placeholder="Search..." />
+        </div>
+    </div>
+</nz-dropdown-menu>

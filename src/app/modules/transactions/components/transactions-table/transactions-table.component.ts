@@ -1,9 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { State } from '@app/reducers';
 import { Transaction } from '@app/modules/transactions/store/transaction.model';
-import { selectAllTransactions } from '@app/modules/transactions/store/transaction.reducer';
-import { deleteTransaction } from '@app/modules/transactions/store/transaction.actions';
+import { selectSelectedWidget } from '@app/modules/transactions/store/transaction.reducer';
+import { deleteTransaction, searchTransactionsById } from '@app/modules/transactions/store/transaction.actions';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 @Component({
     selector: 'app-transactions-table',
@@ -11,44 +14,39 @@ import { deleteTransaction } from '@app/modules/transactions/store/transaction.a
     styleUrls: ['./transactions-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsTableComponent {
-    checked = false;
-    loading = false;
-    indeterminate = false;
-    listOfCurrentPageData: readonly Transaction[] = [];
-    setOfCheckedId = new Set<number>();
-
-    readonly transactions$ = this.store.pipe(
-        select(selectAllTransactions)
-    );
+export class TransactionsTableComponent implements OnInit, OnDestroy {
+    private readonly DEBOUNCE_TIME = 300;
+    readonly transactions$: Observable<Transaction[]> = this.store.pipe(select(selectSelectedWidget));
+    public searchIdCtrl = new FormControl('');
+    public visible = false;
+    private subs = new SubSink();
 
     constructor(readonly store: Store<State>) {
     }
 
-    onCurrentPageDataChange(listOfCurrentPageData: readonly Transaction[]): void {
-        this.listOfCurrentPageData = listOfCurrentPageData;
-        this.refreshCheckedStatus();
+    ngOnInit(): void {
+        this.initIdSearch();
     }
 
-    refreshCheckedStatus(): void {
-        // const listOfEnabledData = this.listOfCurrentPageData.filter(({ disabled }) => !disabled);
-        // this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
-        // this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
-    }
-
-    onItemChecked(id: number, checked: boolean): void {
-        // this.updateCheckedSet(id, checked);
-        this.refreshCheckedStatus();
-    }
-
-    onAllChecked(checked: boolean): void {
-        // this.listOfCurrentPageData
-        //     .filter(({ disabled }) => !disabled)
-        //     .forEach(({ id }) => this.updateCheckedSet(id, checked));
-        this.refreshCheckedStatus();
+    ngOnDestroy(): void {
+        this.clearSearch();
+        this.subs.unsubscribe();
     }
 
     public deleteTransaction(id: string): void {
         this.store.dispatch(deleteTransaction({ id }));
+    }
+
+    private initIdSearch(): void {
+        this.clearSearch();
+        this.subs.sink = this.searchIdCtrl.valueChanges
+            .pipe(debounceTime(this.DEBOUNCE_TIME))
+            .subscribe(search =>
+                this.store.dispatch(searchTransactionsById({ search }))
+            );
+    }
+
+    private clearSearch(): void {
+        this.store.dispatch(searchTransactionsById({ search: '' }));
     }
 }
