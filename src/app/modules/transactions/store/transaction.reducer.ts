@@ -2,12 +2,14 @@ import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Transaction } from './transaction.model';
 import * as TransactionActions from './transaction.actions';
+import moment from 'moment';
 
 export const transactionsFeatureKey = 'transaction';
 
 export interface State extends EntityState<Transaction> {
     // additional entities state properties
     searchId: string;
+    dateRanges: Date[];
 }
 
 export const adapter: EntityAdapter<Transaction> = createEntityAdapter<Transaction>();
@@ -15,6 +17,7 @@ export const adapter: EntityAdapter<Transaction> = createEntityAdapter<Transacti
 export const initialState: State = adapter.getInitialState({
     // additional entity state properties
     searchId: '',
+    dateRanges: [],
 });
 
 
@@ -55,6 +58,9 @@ export const reducer = createReducer(
     ),
     on(TransactionActions.searchTransactionsById,
        (state, action) => ({ ...state, searchId: action.search })
+    ),
+    on(TransactionActions.searchTransactionsDate,
+        (state, action) => ({ ...state, dateRanges: action.dates })
     )
 );
 
@@ -69,9 +75,25 @@ export const selectSearchId = createSelector(
     feature,
     ({ searchId }) => searchId
 );
-export const selectSelectedWidget = createSelector(
+export const selectSearchRange = createSelector(
+    feature,
+    ({ dateRanges }) => dateRanges
+);
+export const selectTransactions = createSelector(
     selectSearchId,
     selectAllTransactions,
-    (string, transactions) =>
-        transactions.filter(item => item.id.indexOf(string) !== -1)
+    selectSearchRange,
+    (string, transactions, ranges) => {
+        let filtered = transactions.filter(item => item.id.indexOf(string) !== -1);
+        if (Boolean(ranges) && Boolean(ranges.length > 1)) {
+            const [start, end] = ranges;
+            const startDate = moment(start).startOf('day').toDate();
+            const endDate = moment(end).endOf('day').toDate();
+            const startTime = startDate.getTime();
+            const endTime = endDate.getTime();
+            const rangeFiltered = filtered.filter(({ date }) => (date.getTime() > startTime && date.getTime() < endTime));
+            filtered = [...rangeFiltered];
+        }
+        return filtered;
+    }
 );

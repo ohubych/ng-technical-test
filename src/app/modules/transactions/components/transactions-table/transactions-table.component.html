@@ -7,11 +7,15 @@
     <thead>
     <tr>
         <th nzCustomFilter>Id
-            <nz-filter-trigger [(nzVisible)]="visible" [nzDropdownMenu]="menu">
+            <nz-filter-trigger [(nzVisible)]="searchVisible.id" [nzDropdownMenu]="idSearch">
                 <i nz-icon nzType="search"></i>
             </nz-filter-trigger>
         </th>
-        <th>Date</th>
+        <th>Date
+            <nz-filter-trigger [(nzVisible)]="searchVisible.date" [nzDropdownMenu]="dateSearch">
+                <i nz-icon nzType="filter"></i>
+            </nz-filter-trigger>
+        </th>
         <th>Currency</th>
         <th>Amount</th>
         <th>Action</th>
@@ -29,10 +33,21 @@
     </tr>
     </tbody>
 </nz-table>
-<nz-dropdown-menu #menu="nzDropdownMenu">
+<!-- ID search form -->
+<nz-dropdown-menu #idSearch="nzDropdownMenu">
     <div class="ant-table-filter-dropdown">
         <div class="search-box">
             <input [formControl]="searchIdCtrl" type="text" nz-input placeholder="Search..." />
+        </div>
+    </div>
+</nz-dropdown-menu>
+<!-- Date range form -->
+<nz-dropdown-menu #dateSearch="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+        <div class="search-box">
+            <nz-range-picker
+                nzMode="date"
+                [formControl]="rangePickerCtrl"></nz-range-picker>
         </div>
     </div>
 </nz-dropdown-menu>

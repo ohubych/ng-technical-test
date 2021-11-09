@@ -5,19 +5,21 @@ import { TransactionsRoutingModule } from '@app/modules/transactions/transaction
 import { SharedModule } from '@app-shared/shared.module';
 import { NzDropDownModule } from "ng-zorro-antd/dropdown";
 import { ReactiveFormsModule } from "@angular/forms";
+import { NzDatePickerModule } from "ng-zorro-antd/date-picker";
 
 
 @NgModule({
     declarations: [
         TransactionsTableComponent,
     ],
-  imports: [
-    CommonModule,
-    TransactionsRoutingModule,
-    SharedModule,
-    NzDropDownModule,
-    ReactiveFormsModule
-  ]
+    imports: [
+        CommonModule,
+        TransactionsRoutingModule,
+        SharedModule,
+        NzDropDownModule,
+        ReactiveFormsModule,
+        NzDatePickerModule
+    ]
 })
 export class TransactionsModule {
 }

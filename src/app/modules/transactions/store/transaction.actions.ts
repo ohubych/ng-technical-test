@@ -56,3 +56,8 @@ export const searchTransactionsById = createAction(
     '[Transaction/API] Search Transactions by id',
     props<{ search: string }>()
 );
+
+export const searchTransactionsDate = createAction(
+    '[Transaction/API] Search Transactions by date ranges',
+    props<{ dates: Date[] }>()
+);

@@ -2,7 +2,7 @@ import { CurrencyEnum, DestinationEnum } from '@app-shared/enum';
 
 export interface Transaction {
     id: string;
-    date: Date | string;
+    date: Date;
     account: string;
     amount: {
         value: number;
