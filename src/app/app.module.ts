@@ -22,10 +22,18 @@ const antDesignIcons = AllIcons as {
 };
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
 
-// ngrx store to localstorage
+/** ngrx store to localstorage **/
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-    return localStorageSync({ keys: ['currency'], rehydrate: true })(reducer);
+    return localStorageSync({ keys: ['transaction'], rehydrate: true })(reducer);
 }
+
+/** config angular i18n **/
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+registerLocaleData(en);
+
+/** config ng-zorro-antd i18n **/
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 
 const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 
@@ -43,7 +51,10 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
         StoreModule.forRoot(reducers, { metaReducers }),
         !environment.production ? StoreDevtoolsModule.instrument() : []
     ],
-    providers: [{ provide: NZ_ICONS, useValue: icons }],
+    providers: [
+        { provide: NZ_I18N, useValue: en_US },
+        { provide: NZ_ICONS, useValue: icons }
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -7,15 +7,15 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import * as shortId from 'short-uuid';
 import { Store } from '@ngrx/store';
 import { State } from '@app/reducers';
-import { addCurrency } from '@app/modules/currencies-list/store/currency.actions';
+import { addTransaction } from '@app/modules/transactions/store/transaction.actions';
 
 @Component({
-    selector: 'app-add-currency',
-    templateUrl: './add-currency.component.html',
-    styleUrls: ['./add-currency.component.scss'],
+    selector: 'app-add-transaction',
+    templateUrl: './add-transaction.component.html',
+    styleUrls: ['./add-transaction.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddCurrencyComponent {
+export class AddTransactionComponent {
     public accountCtrl = new FormControl(AccountEnum.UBSGroup, Validators.required);
     public amountValueCtrl = new FormControl('', Validators.required);
     public amountCurrencyCtrl = new FormControl(CurrencyEnum.XTZ, Validators.required);
@@ -65,7 +65,7 @@ export class AddCurrencyComponent {
     public create(): void {
         const id = shortId.generate();
         const date = new Date();
-        this.store.dispatch(addCurrency({ currency: { id, date, ...this.form.value } }));
+        this.store.dispatch(addTransaction({ transaction: { id, date, ...this.form.value } }));
         this.showMessage('success');
         this.resetForm();
     }

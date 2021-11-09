@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddCurrencyComponent } from './components/add-currency/add-currency.component';
+import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
 
 
 const routes: Routes = [
@@ -11,7 +11,7 @@ const routes: Routes = [
     },
     {
         path: 'index',
-        component: AddCurrencyComponent,
+        component: AddTransactionComponent,
         canActivate: [],
     },
 ];

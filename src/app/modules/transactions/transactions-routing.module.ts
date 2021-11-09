@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CurrenciesTableComponent } from './components/currencies-table/currencies-table.component';
+import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
 
 
 const routes: Routes = [
     {
         path: '',
-        component: CurrenciesTableComponent,
+        component: TransactionsTableComponent,
         canActivate: [],
     },
 ];
@@ -15,5 +15,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class CurrenciesListRoutingModule {
+export class TransactionsRoutingModule {
 }

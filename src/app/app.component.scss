@@ -1,6 +1,7 @@
 nz-header {
     position: fixed;
     width: 100%;
+    z-index: 1;
 
     .logo {
         width: 141px;
@@ -8,6 +9,10 @@ nz-header {
 
     [nz-menu] {
         line-height: 64px;
+    }
+
+    & .ant-menu {
+        text-align: right;
     }
 }
 

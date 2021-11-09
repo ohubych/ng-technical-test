@@ -7,8 +7,8 @@ const routes: Routes = [
         loadChildren: () => import('src/app/modules/main/main.module').then(m => m.MainModule),
     },
     {
-        path: 'currencies',
-        loadChildren: () => import('src/app/modules/currencies-list/currencies-list.module').then(m => m.CurrenciesListModule),
+        path: 'transactions',
+        loadChildren: () => import('@app/modules/transactions/transactions.module').then(m => m.TransactionsModule),
     },
 ];
 

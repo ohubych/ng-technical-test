@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddCurrencyComponent } from './components/add-currency/add-currency.component';
+import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
 import { MainRoutingModule } from '@app/modules/main/main-routing.module';
 import { SharedModule } from '@app-shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ import { MetaDataFormComponent } from './components/meta-data-form/meta-data-for
 
 @NgModule({
     declarations: [
-        AddCurrencyComponent,
+        AddTransactionComponent,
         MetaDataFormComponent,
     ],
     imports: [

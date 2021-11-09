@@ -1,39 +1,31 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { State } from '@app/reducers';
-import { Currency } from '@app/modules/currencies-list/store/currency.model';
-import { selectAllCurrency } from '@app/modules/currencies-list/store/currency.reducer';
-import { addCurrency, deleteCurrency } from "@app/modules/currencies-list/store/currency.actions";
+import { Transaction } from '@app/modules/transactions/store/transaction.model';
+import { selectAllTransactions } from '@app/modules/transactions/store/transaction.reducer';
+import { deleteTransaction } from '@app/modules/transactions/store/transaction.actions';
 
 @Component({
-    selector: 'app-currencies-table',
-    templateUrl: './currencies-table.component.html',
-    styleUrls: ['./currencies-table.component.scss'],
+    selector: 'app-transactions-table',
+    templateUrl: './transactions-table.component.html',
+    styleUrls: ['./transactions-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CurrenciesTableComponent implements OnInit {
+export class TransactionsTableComponent {
     checked = false;
     loading = false;
     indeterminate = false;
-    listOfData: readonly Currency[] = [];
-    listOfCurrentPageData: readonly Currency[] = [];
+    listOfCurrentPageData: readonly Transaction[] = [];
     setOfCheckedId = new Set<number>();
 
-    readonly currencies$ = this.store.pipe(
-        select(selectAllCurrency)
+    readonly transactions$ = this.store.pipe(
+        select(selectAllTransactions)
     );
 
     constructor(readonly store: Store<State>) {
     }
 
-    ngOnInit(): void {
-        this.listOfData = [];
-
-        this.currencies$
-            .subscribe(list => console.log(list));
-    }
-
-    onCurrentPageDataChange(listOfCurrentPageData: readonly Currency[]): void {
+    onCurrentPageDataChange(listOfCurrentPageData: readonly Transaction[]): void {
         this.listOfCurrentPageData = listOfCurrentPageData;
         this.refreshCheckedStatus();
     }
@@ -57,6 +49,6 @@ export class CurrenciesTableComponent implements OnInit {
     }
 
     public deleteTransaction(id: string): void {
-        this.store.dispatch(deleteCurrency({ id }));
+        this.store.dispatch(deleteTransaction({ id }));
     }
 }

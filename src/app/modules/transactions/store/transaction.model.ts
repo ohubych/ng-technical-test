@@ -1,6 +1,6 @@
 import { CurrencyEnum, DestinationEnum } from '@app-shared/enum';
 
-export interface Currency {
+export interface Transaction {
     id: string;
     date: Date | string;
     account: string;
