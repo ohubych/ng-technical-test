@@ -5,7 +5,7 @@ import { transactions, startMonth, endMonth, id } from '@app/modules/main/compon
 import { initialState } from '@app/modules/transactions/store/transaction.reducer';
 import { AccountEnum, CurrencyEnum, DestinationEnum } from '@app-shared/enum';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { CUSTOM_ELEMENTS_SCHEMA, forwardRef } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement, forwardRef, Injectable } from "@angular/core";
 import { FormBuilder, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
@@ -20,19 +20,23 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { HttpClientModule } from '@angular/common/http';
+import { By } from '@angular/platform-browser';
 
+@Injectable()
 class MockNzMessageService {
     constructor() {}
 
-    create: () => ({
-        content: 'Transaction successfully created',
-        createdAt: 'Fri Nov 12 2021 03:30:27 GMT+0200 (Eastern European Standard Time)',
-        messageId: 'message--0',
-        onClose: () => { },
-        options: { nzDuration: 3000, nzAnimate: true, nzPauseOnHover: true },
-        state: 'leave',
-        type: 'success',
-    })
+    create() {
+        return {
+            content: 'Transaction successfully created',
+            createdAt: 'Fri Nov 12 2021 03:30:27 GMT+0200 (Eastern European Standard Time)',
+            messageId: 'message--0',
+            onClose: () => { },
+            options: { nzDuration: 3000, nzAnimate: true, nzPauseOnHover: true },
+            state: 'leave',
+            type: 'success',
+        };
+    }
 };
 
 describe('AddTransactionComponent', () => {
@@ -41,6 +45,8 @@ describe('AddTransactionComponent', () => {
 
     let store: MockStore;
     let message: MockNzMessageService;
+    let debugElement: DebugElement;
+    let storeSpy: any;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -89,6 +95,8 @@ describe('AddTransactionComponent', () => {
     beforeEach(() => {
         store = TestBed.inject(MockStore);
         fixture = TestBed.createComponent(AddTransactionComponent);
+        debugElement = fixture.debugElement;
+        storeSpy = spyOn(store, 'dispatch').and.callThrough();
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -98,6 +106,8 @@ describe('AddTransactionComponent', () => {
     });
 
     it('form should be valid', () => {
+        const submitBtn = debugElement.query(By.css('button.submit-bth'));
+        expect(submitBtn.nativeElement.getAttribute('disabled')).toBe('true');
         component.addMetaGroup({ key: 'Key #1', value: '1' });
         component.amountValueCtrl.setValue(1.1);
         component.accountCtrl.setValue(AccountEnum.UBSGroup);
@@ -125,6 +135,7 @@ describe('AddTransactionComponent', () => {
     });
 
     it('should be create new transaction', () => {
+        const submitBtn = debugElement.query(By.css('button.submit-bth'));
         component.addMetaGroup({ key: 'Key #1', value: '1' });
         component.accountCtrl.setValue(AccountEnum.UBSGroup);
         component.amountValueCtrl.setValue(2.2);
@@ -133,6 +144,7 @@ describe('AddTransactionComponent', () => {
         component.destinationCtrl.setValue(DestinationEnum.UA);
         fixture.detectChanges();
         expect(component.isValid).toBeTruthy();
+        expect(submitBtn.nativeElement.getAttribute('disabled')).toBe(null);
     });
 
     it('form should be reset', () => {
@@ -150,9 +162,32 @@ describe('AddTransactionComponent', () => {
         });
     });
 
-    it('form should be created', () => {
+    it('form and form controls should be created', () => {
         component.ngOnInit();
         expect(component.form.controls).toBeTruthy();
+        expect(component.accountCtrl).toBeTruthy();
+        expect(component.amountGroup).toBeTruthy();
+        expect(component.freePayCtrl).toBeTruthy();
+        expect(component.destinationCtrl).toBeTruthy();
+        expect(component.metaDataArray).toBeTruthy();
+    });
+
+
+    it('should create new transaction and clear form', () => {
+        component.create();
+        fixture.detectChanges();
+
+        expect(storeSpy).toHaveBeenCalled();
+        expect(component.form.value).toEqual({
+            account: AccountEnum.UBSGroup,
+            amount: {
+                value: '',
+                currency: CurrencyEnum.XTZ,
+            },
+            freePay: false,
+            destination: DestinationEnum.CH,
+            metaData: [],
+        });
     });
 
 });
