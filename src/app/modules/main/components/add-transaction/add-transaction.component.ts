@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { SelectOption } from '@app-shared/models';
 import { accountOptions, currencyOptions, destinationOptions } from '@app/modules/shared/mock-data/options';
 import { AccountEnum, CurrencyEnum, DestinationEnum } from '@app-shared/enum';
@@ -26,7 +26,6 @@ export class AddTransactionComponent implements OnInit {
         value: this.amountValueCtrl,
         currency: this.amountCurrencyCtrl,
     });
-    public loading = false;
     public form: FormGroup = new FormGroup({});
     public readonly accountOptions: SelectOption[] = accountOptions;
     public readonly currencyOptions: SelectOption[] = currencyOptions;
@@ -34,13 +33,13 @@ export class AddTransactionComponent implements OnInit {
 
     constructor(
         private message: NzMessageService,
-        readonly store: Store<State>
+        readonly store: Store<State>,
+        public fb: FormBuilder,
     ) {
     }
 
     ngOnInit(): void {
         this.initForm();
-        this.loading = true;
     }
 
     public get isValid(): boolean {
@@ -51,8 +50,8 @@ export class AddTransactionComponent implements OnInit {
         this.message.create(type, `Transaction successfully created`);
     }
 
-    public initForm(): FormGroup {
-        return new FormGroup({
+    public initForm() : void {
+        this.form = new FormGroup({
             account: this.accountCtrl,
             amount: this.amountGroup,
             freePay: this.freePayCtrl,

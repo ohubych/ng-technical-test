@@ -4,9 +4,22 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { transactions, startMonth, endMonth, id } from '@app/modules/main/components/add-transaction/transaction.mock';
 import { initialState } from '@app/modules/transactions/store/transaction.reducer';
 import { AccountEnum, CurrencyEnum, DestinationEnum } from '@app-shared/enum';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { CUSTOM_ELEMENTS_SCHEMA, forwardRef } from '@angular/core';
-import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockNzMessageService {
     constructor() {}
@@ -33,7 +46,22 @@ describe('AddTransactionComponent', () => {
         TestBed.configureTestingModule({
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
             declarations: [AddTransactionComponent],
-            imports: [FormsModule, ReactiveFormsModule],
+            imports: [
+                BrowserAnimationsModule,
+                HttpClientModule,
+                NzLayoutModule,
+                NzButtonModule,
+                NzGridModule,
+                NzMenuModule,
+                NzFormModule,
+                NzInputModule,
+                NzInputNumberModule,
+                NzSelectModule,
+                NzTableModule,
+                NzMessageModule,
+                NzSwitchModule,
+                NzIconModule,
+                ReactiveFormsModule],
             providers: [
                 provideMockStore({
                     initialState: { transaction: initialState },
@@ -49,6 +77,10 @@ describe('AddTransactionComponent', () => {
                     provide: NG_VALUE_ACCESSOR,
                     multi: true,
                     useExisting: forwardRef(() => AddTransactionComponent),
+                },
+                {
+                    provide: FormBuilder,
+                    useValue: new FormBuilder(),
                 },
             ],
         }).compileComponents();
@@ -84,12 +116,12 @@ describe('AddTransactionComponent', () => {
 
     it('should be deleted one item from meta group from array', () => {
         component.addMetaGroup({ key: 'Key #1', value: '1' });
-        component.addMetaGroup({ key: 'Key #2', value: '2' });
+        component.addMetaGroup({ key: 'Key #2', value: '2.1' });
         fixture.detectChanges();
-        expect(component.addMetaGroup.length).toBe(2);
+        expect(component.metaDataArray.length).toBe(2);
         component.deleteMetaGroup(1);
         fixture.detectChanges();
-        expect(component.addMetaGroup.length).toBe(1);
+        expect(component.metaDataArray.length).toBe(1);
     });
 
     it('should be create new transaction', () => {
@@ -106,16 +138,21 @@ describe('AddTransactionComponent', () => {
     it('form should be reset', () => {
         component.resetForm();
         fixture.detectChanges();
-        expect(component.form.value).toBe({
-            destination: DestinationEnum.UA,
-            freePay: false,
+        expect(component.form.value).toEqual({
+            account: AccountEnum.UBSGroup,
             amount: {
                 value: '',
                 currency: CurrencyEnum.XTZ,
             },
+            freePay: false,
+            destination: DestinationEnum.CH,
             metaData: [],
-            account: AccountEnum.UBSGroup,
         });
+    });
+
+    it('form should be created', () => {
+        component.ngOnInit();
+        expect(component.form.controls).toBeTruthy();
     });
 
 });

@@ -20,7 +20,7 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 const antDesignIcons = AllIcons as {
     [key: string]: IconDefinition;
 };
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
+export const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
 
 /** ngrx store to localstorage **/
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
