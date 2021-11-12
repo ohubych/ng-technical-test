@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SelectOption } from '@app-shared/models';
 import { accountOptions, currencyOptions, destinationOptions } from '@app/modules/shared/mock-data/options';
@@ -15,7 +15,7 @@ import { addTransaction } from '@app/modules/transactions/store/transaction.acti
     styleUrls: ['./add-transaction.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddTransactionComponent {
+export class AddTransactionComponent implements OnInit {
     public accountCtrl = new FormControl(AccountEnum.UBSGroup, Validators.required);
     public amountValueCtrl = new FormControl('', Validators.required);
     public amountCurrencyCtrl = new FormControl(CurrencyEnum.XTZ, Validators.required);
@@ -26,21 +26,21 @@ export class AddTransactionComponent {
         value: this.amountValueCtrl,
         currency: this.amountCurrencyCtrl,
     });
-
-    public form = new FormGroup({
-        account: this.accountCtrl,
-        amount: this.amountGroup,
-        freePay: this.freePayCtrl,
-        destination: this.destinationCtrl,
-        metaData: this.metaDataArray,
-    });
-
+    public loading = false;
+    public form: FormGroup = new FormGroup({});
     public readonly accountOptions: SelectOption[] = accountOptions;
     public readonly currencyOptions: SelectOption[] = currencyOptions;
     public readonly destinationOptions: SelectOption[] = destinationOptions;
 
-    constructor(private message: NzMessageService,
-                readonly store: Store<State>) {
+    constructor(
+        private message: NzMessageService,
+        readonly store: Store<State>
+    ) {
+    }
+
+    ngOnInit(): void {
+        this.initForm();
+        this.loading = true;
     }
 
     public get isValid(): boolean {
@@ -49,6 +49,16 @@ export class AddTransactionComponent {
 
     private showMessage(type: string): void {
         this.message.create(type, `Transaction successfully created`);
+    }
+
+    public initForm(): FormGroup {
+        return new FormGroup({
+            account: this.accountCtrl,
+            amount: this.amountGroup,
+            freePay: this.freePayCtrl,
+            destination: this.destinationCtrl,
+            metaData: this.metaDataArray,
+        });
     }
 
     public addMetaGroup(data: { key: string, value: string }): void {

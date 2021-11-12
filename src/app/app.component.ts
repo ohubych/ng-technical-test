@@ -7,4 +7,5 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
+    public title = 'tg-angular-project-template';
 }
